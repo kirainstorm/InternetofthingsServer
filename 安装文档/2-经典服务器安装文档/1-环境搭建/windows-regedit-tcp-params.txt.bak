@@ -1,0 +1,14 @@
+
+调整 MaxUserPort 或 TcpTimedWaitDelay 设置，您必须重新启动 Microsoft Windows 以使新设置生效
+
+HKEY_LOCAL_MACHINE/SYSTEM/CurrentControlSet/ Services/TCPIP/Parameters
+
+TcpTimedWaitDelay 
+
+REG_DWORD 将此值设置为十进制 30，其为十六进制 0x0000001e。该值将等待时间设置为 30 秒
+MaxUserPort 
+REG_DWORD 将此值设置为十进制 65534，其为十六进制 0x0000fffe
+
+TCPWindowSize 
+
+62420
