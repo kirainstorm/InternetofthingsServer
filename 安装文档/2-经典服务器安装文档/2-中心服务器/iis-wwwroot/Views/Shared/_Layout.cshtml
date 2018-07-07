@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - WarningSys Techonlogy Co.,Ltd.</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/jquery", "~/bundles/bootstrap", "~/bundles/jqueryval", "~/bundles/jqueryunobtrusive-ajax")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/Scripts/jquery.easyui-1.4.3.min.js", "~/Scripts/locale/easyui-lang-zh_CN.js")
+    <!--//metro-blue主题在nuget时不下载，要自己下载-->
+    @Styles.Render("~/Content/themes/metro-blue/easyui.css", "~/Content/themes/icon.css", "~/Content/Site.css")
+    @Scripts.Render("~/Scripts/bootstrap-select.min.js", "~/Scripts/bootstrap-switch.min.js")
+    @Styles.Render("~/Content/bootstrap-select.min.css", "~/Content/bootstrap-switch.min.css")
+    <script type="text/javascript">
+        function OnCompleteLogout(request, status) {
+            window.location.reload();
+        }
+        $(document).ready(function () {
+            $.fn.bootstrapSwitch.defaults.size = 'small';
+            $.fn.bootstrapSwitch.defaults.onColor = 'primary';
+            //$.fn.bootstrapSwitch.defaults.onText = '';
+            // $.fn.bootstrapSwitch.defaults.offText = '';
+            $("input[type=\"checkbox\"], input[type=\"radio\"]").not("[data-switch-no-init]").bootstrapSwitch();
+        });
+    </script>
+</head>
+
+<body>
+    <!--导航栏-->
+    <div class="container" style="padding-top:20px; ">
+        @if (Session["userName"] != null)
+        {
+            <ul class="nav  nav-tabs">
+                <li role="presentation" id="mHome">@Html.ActionLink("设备管理", "Index", "Home")</li>
+                <li role="presentation" id="mServers">@Html.ActionLink("通用服务器管理", "Index", "Servers")</li>
+                <li role="presentation" id="mAccountGroup">@Html.ActionLink("用户管理", "Index", "AccountGroups")</li>
+                <li role="presentation" id="mLiveServers">@Html.ActionLink("直播服务器", "Live", "Servers")</li>
+                <li role="presentation" id="mHelp">@Html.ActionLink("帮助", "Help", "Home")</li>
+                <li role="presentation" id="mAbout">@Html.ActionLink("关于", "About", "Home")</li>
+                <li role="presentation"><a href="#" onclick="$('#btnLogin').click();">退出</a> </li>
+                @using (Ajax.BeginForm(new AjaxOptions
+                        {
+                            Url = Url.Action("Logout", "Login", null),
+                            OnComplete = "OnCompleteLogout"
+                        }))
+                {
+                    <li><input id="btnLogin" type="submit" value="@("退出:" + Session["userName"].ToString())" class="btn btn-primary" style="vertical-align:middle;display:none" /></li>
+                }
+            </ul>
+        }
+        else
+        {
+            <ul class="nav  nav-tabs">
+                <li role="presentation" class="active">@Html.ActionLink("请登录", "Index", "Login")  </li>
+            </ul>
+        }
+    </div>
+
+    <script type="text/javascript">
+        function SetActive(i) {
+            $("#mHome").removeClass("active");
+            $("#mServers").removeClass("active");
+            $("#mAccountGroup").removeClass("active");
+            $("#mLiveServers").removeClass("active");
+            //$("#mClusterServers").removeClass("active");
+            $("#mHelp").removeClass("active");
+            $("#mAbout").removeClass("active");
+
+            switch (i) {
+                case 0:
+                    $("#mHome").addClass("active");
+                    break;
+                case 1:
+                    $("#mServers").addClass("active");
+                    break;
+                case 2:
+                    $("#mAccountGroup").addClass("active");
+                    break;
+                case 3:
+                    $("#mLiveServers").addClass("active");
+                    break;
+                case 4:
+                    $("#mHelp").addClass("active");
+                    break;
+                case 5:
+                    $("#mAbout").addClass("active");
+                    break;
+                    //case 6:
+                    //    $("#mClusterServers").addClass("active");
+                    //    break;
+                default:
+                    $("#mHome").addClass("active");
+                    break;
+            }
+
+        }
+    </script>
+    <div class="container body-content" style="padding-top:1px; ">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - WarningSys Techonlogy Co.,Ltd.  [ 1.2.0.0 ]  [ 20170826 ]</p>
+            <!--p>&copy; @DateTime.Now.Year - WarningSys Techonlogy Co.,Ltd.  [ 1.1.0.0 ]  [ 20170315 ]</!--p>
+            <!--p>&copy; @DateTime.Now.Year - WarningSys Techonlogy Co.,Ltd. 测试版本 1.0.1.0 - 20151208</p-->
+            <!--p>&copy; @DateTime.Now.Year - WarningSys Techonlogy Co.,Ltd. 测试版本 1.0.0.3 - 20150801</p-->
+        </footer>
+    </div>
+    @{
+    /*
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    */
+    }
+    @RenderSection("scripts", required: false)
+</body>
+</html>

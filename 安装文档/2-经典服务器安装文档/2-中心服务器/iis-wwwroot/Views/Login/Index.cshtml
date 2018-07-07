@@ -1,0 +1,75 @@
+﻿<div>
+    @{
+        ViewBag.Title = "Log On";
+    }
+    <script type="text/javascript">
+        function OnBegin() {
+            $('#btnLogin').attr('disabled', 'disabled'); $("#alertwarning").hide();
+        }
+        function OnSuccess(data) {
+            if ("sus" == data) {
+                window.location.reload();
+            }
+            else {
+                $("#spaninfo").text(data); $("#alertwarning").show();
+            }
+        }
+        function OnFailure(request, error) {
+            $("#alertwarning").show();
+        }
+        function OnComplete(request, status) {
+            $('#btnLogin').removeAttr('disabled'); $('#Password').val("");
+        }
+        $(document).ready(function () {
+            $('#UserName').val("administrator");
+            //$('#Password').val("123456");
+        });
+    </script>
+    <h2>登录</h2>
+    @using (Ajax.BeginForm(
+new AjaxOptions
+{
+    Url = Url.Action("Login"),
+    LoadingElementId = "loading", //Ajax 加载数据的同时给用户反馈
+    LoadingElementDuration = 10, //毫秒
+    //UpdateTargetId = "tableBody"，//更新的区域，请参考servers
+    OnBegin = "OnBegin",
+    OnFailure = "OnFailure",
+    OnSuccess = "OnSuccess",
+    OnComplete = "OnComplete"
+}))
+    {
+        <div>
+            <fieldset>
+                <table>
+                    <tr>
+                        <td style="text-align:left;width:90px">用户名</td>
+                        <td><input class="form-control" style="width:200px" placeholder="用户名" data-val="true" data-val-length="用户名长度[6-16]" data-val-length-max="16" data-val-length-min="6" data-val-required="该字段是必需的。" id="UserName" name="UserName" type="text" value="" /></td>
+                    </tr>
+                    <tr style="height:22px">
+                        <td style="text-align:left;width:90px"></td>
+                        <td><span class="field-validation-valid text-danger" data-valmsg-for="UserName" data-valmsg-replace="true"> </span></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:left;width:90px">密码</td>
+                        <td><input class="form-control" style="width:200px" placeholder="密码" data-val="true" data-val-length="密码长度[6-12]" data-val-length-max="12" data-val-length-min="6" data-val-required="该字段是必需的。" id="Password" name="Password" type="password" /></td>
+                    </tr>
+                    <tr style="height:22px">
+                        <td style="text-align:left;width:90px"></td>
+                        <td><span class="field-validation-valid text-danger" data-valmsg-for="Password" data-valmsg-replace="true"> </span></td>
+                    </tr>
+                </table>
+                <br />
+                <p>
+                    <input id="btnLogin" type="submit" value="登录" class="btn btn-primary" />
+                </p>
+            </fieldset>
+        </div>
+    }
+    <div id="alertwarning" class="alert alert-warning" role="alert" style="display:none">
+        <span id="spaninfo"></span>
+    </div>
+    <div id="loading" class="load alert alert-warning" role="alert" style="display:none">
+        <p>请等待登陆 ......</p>
+    </div>
+</div>

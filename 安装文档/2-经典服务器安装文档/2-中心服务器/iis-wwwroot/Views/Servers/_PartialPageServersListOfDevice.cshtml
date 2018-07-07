@@ -1,0 +1,63 @@
+﻿@model IEnumerable<NewPlatCenter.Models.Device>
+
+@using PagedList;
+@using PagedList.Mvc;
+
+<script>
+    var _item_index = 0;
+</script>
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <a class="btn btn-default" onclick="_SelectUnusedDevice_Tmp();">选择设备</a>
+    </div>
+    <div class="panel-body">
+        <div class="container-fluid">
+            @{var _item_index = 0;}
+            @foreach (var item in Model)
+            {
+                if (0 == _item_index)
+                {
+                    @:<br />
+                }
+
+                if ((_item_index % 4) == 0)
+                {
+                    @:<div class="row">
+            }
+
+
+            <div class="col-sm-6 col-md-3">
+                <div class="thumbnail">
+                    <div class="caption">
+                        <h3 style="word-wrap:break-word;height:80px">@Html.DisplayFor(modelItem => item.D_Name)</h3>
+                        存储空间(GB):@Html.DisplayFor(modelItem => item.D_Disk)
+                        <br />序列号:@Html.DisplayFor(modelItem => item.D_Serial)
+                        <br />Online:@Html.DisplayFor(modelItem => item.D_Is_Online)
+                        <br />浏览量:@Html.DisplayFor(modelItem => item.D_Browse_Num)
+                        <p>
+                            <a class="btn btn-link btn-xs" onclick="_DeleteDevice_Temp(@item.ID);">移除</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+                if ((_item_index % 4) == 3)
+                {
+                    @:</div>
+            }
+
+
+                _item_index++;
+            }
+            @{
+                int k = _item_index - (_item_index / 4) * 4;
+                if (k != 0)
+                {
+                    //不足一行补齐标签
+                    @:</div>
+                }
+            }
+        </div>
+    </div>
+</div>

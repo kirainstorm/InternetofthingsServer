@@ -1,0 +1,66 @@
+﻿@model IEnumerable<NewPlatCenter.Models.Device>
+
+@using PagedList;
+@using PagedList.Mvc;
+
+<script>
+    _checked_device_node = [];
+</script>
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <a class="btn btn-default" onclick="_SelectNodeCheck_Tmp();">选择设备</a>
+    </div>
+    <div class="panel-body">
+        <div class="container-fluid">
+            @{var _item_index_device = 0;}
+            @foreach (var item in Model)
+            {
+                <script>
+                    _checked_device_node.push(@item.ID);
+                </script>
+
+
+
+                if (0 == _item_index_device)
+                {
+                    @:<br />
+                }
+
+                if ((_item_index_device % 6) == 0)
+                {
+                    @:<div class="row">
+            }
+
+
+            <div class="col-md-2">
+                <div class="thumbnail">
+                    <div class="caption">
+                        <h4 style="word-wrap:break-word;height:80px">@Html.DisplayFor(modelItem => item.D_Name)</h4><br />
+                        @Html.DisplayFor(modelItem => item.D_Serial)
+                        <br />
+                        <a class="btn btn-link btn-xs" onclick="_DeleteAccountGroupDevice_Temp(@item.ID);">移除</a>
+                    </div>
+                </div>
+            </div>
+
+                if ((_item_index_device % 6) == 5)
+                {
+                    @:</div>
+            }
+
+
+                _item_index_device++;
+            }
+            @{
+                int k = _item_index_device - (_item_index_device / 6) * 6;
+                if (k != 0)
+                {
+                    //不足一行补齐标签
+                    @:</div>
+                }
+            }
+        </div>
+        </div>
+    </div>
+<br />

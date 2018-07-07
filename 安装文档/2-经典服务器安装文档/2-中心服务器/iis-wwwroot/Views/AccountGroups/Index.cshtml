@@ -1,0 +1,328 @@
+﻿<div>
+    @Scripts.Render("~/Scripts/My/accoutgroups.js")
+    <script type="text/javascript">
+        SetActive(2);//<<--
+
+
+        $(document).ready(function () {
+            $('#tt').tree({
+                url: '@Url.Action("AccountGroupsJsonTree")', method: 'get', animate: true,
+                onLoadError: function (arguments) {
+                },
+                onSelect: function (node) {
+                    _onSelectAccountGroupTree(node);
+                },
+                onLoadSuccess: function (data) //当数据加载成功之后触发
+                {
+                    _onLoadSuccessAccountGroupTree();
+                },
+                onContextMenu: function (e, node) {
+                    _onContextMenuAccountGroupTree(e, node);
+                }
+            });
+
+
+
+            $('#selecttree').tree({
+                url: '@Url.Action("AccountGroupDeviceJsonTree")',
+                method: 'get',
+                animate: true,
+                multiple:true,
+                onLoadError: function (arguments) {
+                    //alert("2");
+                },
+                onBeforeSelect:function(node)
+                {
+                    var bfind = false;
+                    var checkeds = $(this).tree('getChecked', 'checked');
+                    for (var i = 0; i < checkeds.length; i++) {
+                        //arr.push(checkeds[i].id);
+                        if(checkeds[i].id == node.id)
+                        {
+                            bfind = true;
+                            break;
+                        }
+                    }
+
+                    if (bfind)
+                    {
+                        $(this).tree('uncheck', node.target);
+                    }
+                    else
+                    {
+                        $(this).tree('check', node.target);
+                    }
+
+                    return false;
+                },
+                onSelect: function (node) {
+                    _movedareaid = node.id;
+                },
+                onLoadSuccess: function (data) //当数据加载成功之后触发
+                {
+                    $(this).tree('expandAll');
+                },
+                onCheck: function (node, checked) {
+                    if (!checked)
+                    {
+                        $(node.target).css("color", "#404040");
+                    }
+                    else
+                    {
+                        $(node.target).css("color", "red");
+                    }
+                },
+
+            });
+        });
+
+    </script>
+    <div class="row">
+        <div class="col-md-12">
+            <p>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <!--tree-->
+                            <div class="easyui-panel" style="height:450px">
+                                <ul id="tt" class="easyui-tree" data-options="checkbox:false,method:'get',animate:true,"></ul>
+                            </div>
+                        </div>
+                    <div class="col-lg-9">
+                        <div id="tableBodyDevice">
+                            @Html.Action("_PartialPageAccountGroupDeviceList")
+                        </div>
+                        <div id="tableBodyUser">
+                            @Html.Action("_PartialPageAccountList")
+                        </div>
+                    </div>
+                </div>
+            </p>
+        </div>
+    </div>
+
+</div>
+
+
+<!--异步的，隐藏的，刷新当前页的按钮，当添加删除修改后调用-->
+@using (Ajax.BeginForm(new AjaxOptions
+            {
+                UpdateTargetId = "tableBodyUser",
+                Url = Url.Action("_PartialPageAccountList", new { searchaccountgroupida = ViewBag.searchaccountgroupida }),
+            }))
+{
+    <input class="form-control text-box single-line" id="searchaccountgroupida" name="searchaccountgroupida" style="display:none" type="text" value="" />
+    <button class="btn btn-primary" type="submit" style="display:none" id="s_refresh_a">refresh!</button>
+}
+@using (Ajax.BeginForm(new AjaxOptions
+            {
+                UpdateTargetId = "tableBodyDevice",
+                Url = Url.Action("_PartialPageAccountGroupDeviceList", new { searchaccountgroupidb = ViewBag.searchaccountgroupidb }),
+            }))
+{
+    <input class="form-control text-box single-line" id="searchaccountgroupidb" name="searchaccountgroupidb" style="display:none" type="text" value="" />
+    <button class="btn btn-primary" type="submit" style="display:none" id="s_refresh_b">refresh!</button>
+}
+
+
+
+<!--menu-------------------------------------------------------------------------------------------------------------------------------------------------->
+<div id="mm1" class="easyui-menu" style="width:120px;">
+    <div onclick="javascript: $('#addAccountGroup').modal('toggle');" data-options="iconCls:'icon-add'">添加</div>
+    <div onclick="javascript: $('#editAccountGroup').modal('toggle');" data-options="iconCls:'icon-edit'">修改</div>
+</div>
+<div id="mm2" class="easyui-menu" style="width:120px;">
+    <div onclick="javascript: $('#addAccountGroup').modal('toggle');" data-options="iconCls:'icon-add'">添加</div>
+    <div onclick="javascript: $('#editAccountGroup').modal('toggle');" data-options="iconCls:'icon-edit'">修改</div>
+    <div onclick="javascript: $('#deleteAccountGroup').modal('toggle');" data-options="iconCls:'icon-remove'">删除</div>
+</div>
+<!--AccountGroup-------------------------------------------------------------------------------------------------------------------------------------------------->
+<div class="modal fade bs-example-modal-sm" id="addAccountGroup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">创建</h4>
+            </div>
+            <div class="modal-body form-horizontal">
+                <div class="form-group  form-group-sm">
+                    <label class="col-sm-2 control-label">群组名称</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" data-val="true" data-val-required="*" id="group_name_add" name="group_name_add" type="text" value="" />
+                        <span class="field-validation-valid text-danger" data-valmsg-for="n" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="submit" class="btn btn-primary" id="cbtn" onclick="javascript: _AddAccountGroup()">创建</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade bs-example-modal-sm" id="editAccountGroup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">修改</h4>
+            </div>
+            <div class="modal-body form-horizontal">
+                <div class="form-group  form-group-sm">
+                    <label class="col-sm-2 control-label">群组名称</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" data-val="true" data-val-required="*" id="group_name_edit" name="group_name_edit" type="text" value="" />
+                        <span class="field-validation-valid text-danger" data-valmsg-for="n" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="submit" class="btn btn-primary" id="cbtn" onclick="javascript: _EditAccountGroup()">修改</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade bs-example-modal-sm" id="deleteAccountGroup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">删除</h4>
+            </div>
+            <div class="modal-body">
+                <h5>确定要删除吗</h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="submit" class="btn btn-primary" id="cbtn" onclick="javascript: _DeleteAccountGroup()">删除</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Account-------------------------------------------------------------------------------------------------------------------------------------------------->
+<div class="modal fade bs-example-modal-sm" id="addAccount" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">创建</h4>
+            </div>
+            <div class="modal-body form-horizontal">
+                <div class="form-group  form-group-sm">
+                    <label class="col-sm-2 control-label">姓名</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" data-val="true" data-val-required="*" id="account_name_add" name="account_name_add" type="text" value="" />
+                        <span class="field-validation-valid text-danger" data-valmsg-for="n" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+                <div class="form-group  form-group-sm">
+                    <label class="col-sm-2 control-label">手机号码</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" data-val="true" data-val-required="*" id="account_phone_add" name="account_phone_add" type="text" value="" />
+                        <span class="field-validation-valid text-danger" data-valmsg-for="n" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="submit" class="btn btn-primary" id="cbtn" onclick="javascript: _AddAccount()">创建</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade bs-example-modal-sm" id="editAccount" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">修改</h4>
+            </div>
+            <div class="modal-body form-horizontal">
+                <div class="form-group  form-group-sm">
+                    <label class="col-sm-2 control-label">姓名</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" data-val="true" data-val-required="*" id="account_name_edit" name="account_name_edit" type="text" value="" />
+                        <span class="field-validation-valid text-danger" data-valmsg-for="n" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+                <div class="form-group  form-group-sm">
+                    <label class="col-sm-2 control-label">手机号码</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" data-val="true" data-val-required="*" id="account_phone_edit" name="account_phone_edit" type="text" value="" />
+                        <span class="field-validation-valid text-danger" data-valmsg-for="n" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="submit" class="btn btn-primary" id="cbtn" onclick="javascript: _EditAccount()">修改</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade bs-example-modal-sm" id="deleteAccount" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">删除</h4>
+            </div>
+            <div class="modal-body">
+                <h5>确定要删除吗</h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="submit" class="btn btn-primary" id="cbtn" onclick="javascript: _DeleteAccount()">删除</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<!--device-------------------------------------------------------------------------------------------------------------------------------------------------->
+<div class="modal fade bs-example-modal-sm" id="SelectDevice" tabindex="-1" role="dialog" aria-labelledby="myModalLabel_C" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">选择设备</h4>
+            </div>
+            <div class="modal-body form-horizontal">
+                <div class="form-group  form-group-sm">
+                    <div class="col-sm-12">
+                        <div class="easyui-panel" style="height:470px;width:550px">
+                            <ul id="selecttree" class="easyui-tree" data-options="cascadeCheck: false,checkbox:true,method:'get',animate:true"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="submit" class="btn btn-primary" id="ddbtn" onclick="javascript: _SelectNodeCheck()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade bs-example-modal-sm" id="deleteAccountGroupDevice" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">删除</h4>
+            </div>
+            <div class="modal-body">
+                <h5>确定要删除吗</h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="submit" class="btn btn-primary" id="cbtn" onclick="javascript: _DeleteAccountGroupDevice()">删除</button>
+            </div>
+        </div>
+    </div>
+</div>

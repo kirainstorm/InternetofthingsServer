@@ -1,0 +1,198 @@
+﻿@Scripts.Render("~/Scripts/My/coreservers.js")
+<div>
+    @{ViewBag.Title = "servers";}
+    <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+        SetActive(1);//<<--
+
+
+        $(document).ready(function () {
+            $('#selecttree').tree({
+                url: '@Url.Action("CoreServerUnusedDeviceJsonTree")',
+                method: 'get',
+                animate: true,
+                multiple: true,
+                onLoadError: function (arguments) {
+                    //alert("2");
+                },
+                onBeforeSelect: function (node) {
+                    var bfind = false;
+                    var checkeds = $(this).tree('getChecked', 'checked');
+                    for (var i = 0; i < checkeds.length; i++) {
+                        //arr.push(checkeds[i].id);
+                        if (checkeds[i].id == node.id) {
+                            bfind = true;
+                            break;
+                        }
+                    }
+                    if (bfind) {
+                        $(this).tree('uncheck', node.target);
+                    }
+                    else {
+                        $(this).tree('check', node.target);
+                    }
+
+                    return false;
+                },
+                onSelect: function (node) {
+                },
+                onLoadSuccess: function (data) //当数据加载成功之后触发
+                {
+                    $(this).tree('expandAll');
+                },
+                onCheck: function (node, checked) {
+                    if (!checked) {
+                        $(node.target).css("color", "#404040");
+                    }
+                    else {
+                        $(node.target).css("color", "red");
+                    }
+                },
+            });
+        });
+
+
+    </script>
+    <div class="row">
+        <div class="col-md-12">
+            <br />
+            <div id="tableBody">
+                @Html.Action("_PartialPageServersList")
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--create------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>
+<div class="modal fade bs-example-modal-sm" id="CreateServers" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">创建</h4>
+            </div>
+            <div class="modal-body">
+                <table style="text-align:center">
+                    <!--name-->
+                    <tr style="height:35px">
+                        <td style="width:90px">名称</td>
+                        <td style="width:190px"><input class="form-control text-box single-line" data-val="true" data-val-required="*" id="name" name="name" type="text" value="" /></td>
+                        <td><span class="field-validation-valid text-danger" data-valmsg-for="name" data-valmsg-replace="true"></span></td>
+                    </tr>
+                    <!--ip-->
+                    <tr style="height:35px">
+                        <td>外网IP</td>
+                        <td><input class="form-control text-box single-line" data-val="true" data-val-required="*" id="outip" name="outip" type="text" value="" /></td>
+                        <td><span class="field-validation-valid text-danger" data-valmsg-for="outip" data-valmsg-replace="true"></span></td>
+                    </tr>
+                    <!--InnerIp-->
+                    <tr style="height:35px">
+                        <td>内网IP</td>
+                        <td><input class="form-control text-box single-line" data-val="true" data-val-required="*" id="inip" name="inip" type="text" value="" /></td>
+                        <td><span class="field-validation-valid text-danger" data-valmsg-for="inip" data-valmsg-replace="true"></span></td>
+                    </tr>
+                    <!--Serial-->
+                    <tr style="height:35px">
+                        <td>序列号</td>
+                        <td><input class="form-control text-box single-line" data-val="true" data-val-required="*" id="serial" name="serial" type="text" value="" /></td>
+                        <td><span class="field-validation-valid text-danger" data-valmsg-for="serial" data-valmsg-replace="true"></span></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="submit" class="btn btn-primary" id="cbtn" onclick="javascript: _AddCoreServer()">创建</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<!--delete-->
+<div class="modal fade bs-example-modal-sm" id="DeleteServers" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">创建</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div>
+                        确定要删除吗?
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="mdbtn" onclick="javascript: _DeleteCoreServer()">Delete</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="modal fade bs-example-modal-sm" id="OpDevice" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">管理设备</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <br />
+                                <div id="tableBodyDevice">
+                                    @Html.Action("_PartialPageServersListOfDevice")
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade bs-example-modal-sm" id="SelectDevice" tabindex="-1" role="dialog" aria-labelledby="myModalLabel_C" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">选择设备</h4>
+            </div>
+            <div class="modal-body form-horizontal">
+                <div class="form-group  form-group-sm">
+                    <div class="col-sm-12">
+                        <div class="easyui-panel" style="height:470px;width:550px">
+                            <ul id="selecttree" class="easyui-tree" data-options="cascadeCheck: false,checkbox:true,method:'get',animate:true"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="submit" class="btn btn-primary" id="ddbtn" onclick="javascript: _SelectUnusedCheck()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+@using (Ajax.BeginForm(new AjaxOptions
+            {
+                UpdateTargetId = "tableBodyDevice",
+                Url = Url.Action("_PartialPageServersListOfDevice"),
+            }))
+{
+    <input id="svrid" name="svrid" style="display:none" />
+    <button class="btn btn-primary" type="submit" style="display:none" id="s_refresh_device">refresh!</button>
+}

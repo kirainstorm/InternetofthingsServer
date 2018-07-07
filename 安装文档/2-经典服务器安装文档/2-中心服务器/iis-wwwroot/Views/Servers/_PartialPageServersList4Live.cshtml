@@ -1,0 +1,78 @@
+﻿@model IEnumerable<NewPlatCenter.Models.Server>
+@using PagedList;
+@using PagedList.Mvc;
+
+
+
+<script>
+    var _item_index = 0;
+</script>
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <button type="button" class="btn btn-default " data-toggle="modal" data-target="#CreateServers">
+            创建
+        </button>
+        <br />这是分发服务器, 支持负载均衡模式，只要IP添负载均衡的IP即可
+    </div>
+    <div class="panel-body">
+        <div class="container-fluid">
+            @{var _item_index = 0;}
+            @foreach (var item in Model)
+            {
+                if (0 == _item_index)
+                {
+                    @:<br />
+                }
+
+                if ((_item_index % 4) == 0)
+                {
+                    @:<div class="row">
+            }
+
+
+            <div class="col-sm-6 col-md-3">
+                <div class="thumbnail">
+                    <div class="caption">
+                        <h3 style="word-wrap:break-word;height:80px">@Html.DisplayFor(modelItem => item.S_Name)</h3>
+                        IP:@Html.DisplayFor(modelItem => item.S_Live_IP)
+                        <br /><br />序列号:@Html.DisplayFor(modelItem => item.S_Serial)
+                        <br /><br />承载量:@Html.DisplayFor(modelItem => item.S_Online_Count)
+                        <p>
+                            <br /><a class="btn btn-link btn-xs" onclick="_op_device(@item.ID)">设备管理</a>|
+                            <a class="btn btn-link btn-xs" onclick="_DeleteLiveServer_Tmp(@item.ID)">删除</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+                if ((_item_index % 4) == 3)
+                {
+                    @:</div>
+            }
+
+
+                _item_index++;
+            }
+            @{
+                int k = _item_index - (_item_index / 4) * 4;
+                if (k != 0)
+                {
+                    //不足一行补齐标签
+                    @:</div>
+                }
+            }
+        </div>
+    </div>
+    </div>
+
+
+    <!--异步的，隐藏的，刷新当前页的按钮，当添加删除修改后调用-->
+    @using (Ajax.BeginForm(new AjaxOptions
+            {
+                UpdateTargetId = "tableBody",
+                Url = Url.Action("_PartialPageServersList4Live"),
+            }))
+    {
+        <button class="btn btn-primary" type="submit" style="display:none" id="s_refresh">refresh!</button>
+    }
