@@ -30,5 +30,3 @@
 *.exe
 *.out
 *.app
-
-*.exe linguist-language=c++
