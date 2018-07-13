@@ -1,0 +1,54 @@
+﻿@model IEnumerable<NewPlatCenter.Models.Account>
+
+@using PagedList;
+@using PagedList.Mvc;
+
+<script>
+    var _item_index = 0;
+</script>
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <a class="btn btn-default" onclick="$('#account_name_add').val(''); $('#account_phone_add').val(''); $('#addAccount').modal('toggle')">添加用户</a>
+    </div>
+    <div class="panel-body">
+        <div class="container-fluid">
+            @{var _item_index = 0;}
+            @foreach (var item in Model)
+            {
+
+                if (0 == _item_index)
+                {
+                    @:<br/>
+                }
+                
+                if ((_item_index % 6) == 0)
+                {
+                    @:<div class="row">
+            }
+
+
+            <div class="col-md-2">
+                <div class="thumbnail">
+                    <div class="caption">
+                        <b style="word-wrap:break-word;">@Html.DisplayFor(modelItem => item.Ac_Nickname)</b><br />
+                        @Html.DisplayFor(modelItem => item.Ac_Phone)
+                        <br />
+                        <a class="btn btn-link btn-xs" onclick="_EditAccount_Temp(@item.ID ,'@item.Ac_Nickname','@item.Ac_Phone')">编辑</a> |
+                        <a class="btn btn-link btn-xs" onclick="_DeleteAccount_Temp(@item.ID);">删除</a>
+                    </div>
+                </div>
+            </div>
+
+                if ((_item_index % 6) == 5)
+                {
+                    @:</div>
+            }
+
+
+                _item_index++;
+            }
+        </div>
+    </div>
+</div>
+<br />

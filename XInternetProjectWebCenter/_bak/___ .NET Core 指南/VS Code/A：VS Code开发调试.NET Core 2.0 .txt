@@ -1,0 +1,31 @@
+https://www.microsoft.com/net/download/Windows/build
+
+安装.NET Core SDK 和 VSCode 
+
+
+建立一个与你想要得工程的名字的目录
+
+使用cmd进入工程目录
+
+dotnet new console     //这个命令将建立一个与你的目录名字相同的工程
+dotnet run
+
+
+使用 VS Code 打开core2.0文件夹，打开Program.cs 文件
+如果是首次打开需耐心等待插件的安装
+Installing C# dependencies...
+
+Platform: win32, x86_64
+
+
+Downloading package 'OmniSharp for Windows (.NET 4.6 / x64)' (21254 KB) .................... Done!
+Downloading package '.NET Core Debugger (Windows / x64)' (39360 KB) .................... Done!
+
+
+Installing package 'OmniSharp for Windows (.NET 4.6 / x64)'
+
+Installing package '.NET Core Debugger (Windows / x64)'
+
+
+Finished
+还提示安装一个插件，选择yes

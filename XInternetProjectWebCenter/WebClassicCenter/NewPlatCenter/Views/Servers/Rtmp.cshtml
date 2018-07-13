@@ -1,0 +1,32 @@
+﻿<div>
+    @{ViewBag.Title = "servers";}
+    <script>
+        SetActive(7);//<<--
+
+    </script>
+    
+    <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+    <div class="row">
+        <div class="col-md-12">
+            <!--新建服务器-->
+            <p>
+                <div class="" role="alert">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="alert alert-info" role="alert">
+                                这是一个RTMP/HTTP服务器<br /><br />
+                                rtmp/http需要手动添加相关参数<br /><br />
+                                添加步骤：<br /><br />
+                                1：搭建ngnix服务器<br /><br />
+                                2：安装XNgnixService<br /><br />
+                                3：从中心获取设备ID配置ngnix服务器发布接口<br /><br />
+                                4：从中心获取设备信息配置XNgnixService服务发布流到ngnix服务器<br /><br />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p>
+            <br />
+        </div>
+    </div>
+</div>

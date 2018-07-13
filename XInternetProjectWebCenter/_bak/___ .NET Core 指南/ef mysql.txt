@@ -1,0 +1,173 @@
+https://docs.microsoft.com/zh-cn/aspnet/core/data/ef-rp/intro
+
+
+
+https://www.nuget.org/packages/Microsoft.AspNetCore.All
+https://www.nuget.org/packages/Microsoft.NETCore.App
+
+
+Install-Package Microsoft.AspNetCore.Session
+Install-Package Microsoft.AspNetCore.All
+Install-Package Microsoft.NETCore.App    //20180110 （2.0.5的Scaffold-DbContext有问题， 2.0.0 ，2.0.3 2.0.4都可以）
+Scaffold-DbContext "Server=172.30.145.3;Database=dbrs;uid=sa;pwd=Vmrs1234" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
+
+
+
+
+
+Install-Package Pomelo.EntityFrameworkCore.MySql
+Scaffold-DbContext "Server=172.30.145.6;Database=test;uid=myuser;pwd=mypassword" "Pomelo.EntityFrameworkCore.MySql" -OutputDir Models
+#Install-Package MySql.Data.EntityFrameworkCore 不好用。。。
+
+
+
+请注意在xxxxContext.cs中的链接字符串可能要加上 Convert Zero Datetime = True;，mysql的开发者喜欢将日期使用timestamp，而且使用默认0
+optionsBuilder.UseMySql("Server=192.168.1.7;Database=gvap;uid=root;pwd=111111;Convert Zero Datetime = True;");
+
+
+
+
+
+关于调用Entity Framework
+真的，相信我，跟之前一毛一样，真的一毛一样。
+Models.TestNetCoreEFContext context = new Models.TestNetCoreEFContext();
+
+protected override void Dispose(bool disposing)
+{
+    if (disposing)
+    {
+        _context.Dispose();
+    }
+    base.Dispose(disposing);
+}
+
+var StudentList = context.Student.ToList();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Install-Package Microsoft.EntityFrameworkCore.Tools -Version 2.0.1
+//Install-Package Microsoft.EntityFrameworkCore.Tools.DotNet -Version 2.0.1 
+//Install-Package Microsoft.EntityFrameworkCore.Design
+
+ef 驱动包
+https://docs.microsoft.com/zh-cn/ef/core/providers/
+
+
+通过Nuget安装 EF Core
+Sql Server 请安装 Microsoft.EntityFrameworkCore.SqlServer
+MySql/MariaDB请安装 Pomelo.EntityFrameworkCore.MySql (2.0及以上版本)
+
+
+
+
+这里是使用 EF Core 的 DB First ，，不用Code First
+Scaffold-DbContext "数据库连接字符串" EF组件名(Microsoft.EntityFrameworkCore.SqlServer/Pomelo.EntityFrameworkCore.MySql/等等) -OutputDir 输出文件夹名称
+
+
+
+
+
+
+
+
+//https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.SqlServer/
+//Install-Package Microsoft.EntityFrameworkCore.SqlServer
+//Install-Package Microsoft.EntityFrameworkCore.SqlServer.Design
+
+
+生成DbContext
+Scaffold-DbContext "Server=172.30.145.13;Database=RedirectDB;uid=sa;pwd=Vmrs1234" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
+
+在***Context.cs中添加一个属性用来存放ConnectionString，另外我们需要重写OnConfiguring方法，完整的代码应该是这样：
+public static string ConnectionString { get; set; } 
+protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
+{ 
+  optionsBuilder.UseSqlServer(ConnectionString); 
+}
+
+打开appSetting.json,添加代码
+
+{ 
+  "ConnectionStrings": { 
+    "TestNetCoreEF": "Data Source={your sql server host address};Initial Catalog=TestNetCoreEF;user id={your username};password={your password};"
+  }, 
+  "Logging": { 
+    "IncludeScopes": false, 
+    "LogLevel": { 
+      "Default": "Debug", 
+      "System": "Information", 
+      "Microsoft": "Information"
+    } 
+  } 
+}
+打开 Startup.cs，在ConfigureServices(IServiceCollection services)方法中添加如下代码：
+TestNetCoreEFContext.ConnectionString = Configuration.GetConnectionString("TestNetCoreEF");
+完整的代码应该是这样：
+public void ConfigureServices(IServiceCollection services) 
+{ 
+  //config the db connection string 
+  TestNetCoreEFContext.ConnectionString = Configuration.GetConnectionString("TestNetCoreEF"); 
+  
+  // Add framework services. 
+  services.AddMvc(); 
+}
+
+关于调用Entity Framework
+真的，相信我，跟之前一毛一样，真的一毛一样。
+Models.TestNetCoreEFContext context = new Models.TestNetCoreEFContext();
+ 
+var StudentList = context.Student.ToList();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Install-Package Pomelo.EntityFrameworkCore.MySql -Version 2.0.1 
+
+
+//https://www.nuget.org/packages?q=MySql.Data.EntityFrameworkCore
+//Install-Package MySql.Data.EntityFrameworkCore -Version 8.0.9-dmr 
+//https://www.nuget.org/packages/MySql.Data.EntityFrameworkCore.Design/8.0.9-dmr
+//Install-Package MySql.Data.EntityFrameworkCore.Design -Version 8.0.9-dmr //
+//https://www.nuget.org/packages/MySql.Data/8.0.9-dmr
+
+//Install-Package MySql.Data -Version 8.0.9-dmr 
+//Install-Package MySql.Data -Pre
+//Install-Package Dapper
+
+
+这里最重要的一点： 链接字符串要加上 SslMode=None 不然会报错误：SSL not supported in this WinRT release.
+然后就是简单使用Dapper 操作数据库了，更多功能可以查看官方文档。

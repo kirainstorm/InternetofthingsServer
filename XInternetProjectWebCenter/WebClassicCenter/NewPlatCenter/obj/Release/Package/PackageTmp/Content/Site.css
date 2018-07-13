@@ -1,0 +1,100 @@
+﻿
+/*
+body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+// Set padding to keep content from hitting the edges 
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+// Override the default bootstrap behavior where horizontal description lists 
+ //  will truncate terms that are too long to fit in the left column 
+
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+// Set width on the form input elements since they're 100% wide by default 
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+*/
+
+
+
+
+
+/*///////////////////////////////////////////////////////////////*/
+.altrow{
+	background-color:Red;
+}
+
+.layout-grid-frame {
+	width: 780px;
+	font-size: 12px;
+}
+
+.siTable 
+{
+
+}
+.siTable thead {
+    HEIGHT: 50px;
+	vertical-align:middle;
+
+
+
+}
+.siTable thead.th {
+    HEIGHT: 50px;
+	vertical-align:middle;
+
+}
+.siTable tbody
+{
+    width:auto;
+	font-size: 13px;
+	border-top-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-left-style: solid;
+	border-top-color: #666666;
+	border-left-color: #666666;
+}
+.siTable tbody tr {
+	HEIGHT: 48px;
+	vertical-align:middle;
+	/*在ie下如有style="display:none"好像会残留颜色*/
+	/*onmouseover: expression(onmouseover=function (){this.style.backgroundColor ='F5F5F5'});
+	onmouseout: expression(onmouseout=function (){this.style.backgroundColor =''});*/
+}
+
+.siTable tbody tr:hover, 
+.siTable tbody tr.altrow{
+	background-color:darkred;
+}
+
+
+.siTable tbody tr th {
+	vertical-align: middle;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-right-color: #666666;
+	border-bottom-color: #666666;
+
+}
+
+.siTable th.TitleBgcolor {
+	background-color:#999999;
+	font-weight: bolder;
+	vertical-align: middle;
+	text-align: center;
+}

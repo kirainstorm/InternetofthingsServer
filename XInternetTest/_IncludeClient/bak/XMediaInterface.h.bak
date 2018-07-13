@@ -1,0 +1,155 @@
+#ifndef _Xmediainterface_ewerwerjjwe_H_KJ2sd32qFS3RFSDF_234JLO34
+#define _Xmediainterface_ewerwerjjwe_H_KJ2sd32qFS3RFSDF_234JLO34
+
+
+#include "PlatformDefine.h"
+#include "XMsgDefToClientStreamCh.h"
+#include "XPlayer.hpp"
+
+struct HIS_LOG_T
+{
+	int	log_id;
+	int reserve;
+	char store_file[128];
+	_XSERVER_TIME	store_begin_time_tm;
+	_XSERVER_TIME	store_end_time_tm;
+};
+
+class CXMediaDownloadInterface;
+class CXMediaDownloadCallback;
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+class CXMediaMessageCallback//Message
+{
+public:
+	virtual int OnMessageCallback(int nMessageType, int nMessageVal, void * pUser) = 0;
+};
+class CXMediaTransparentTransmissionCallback//TransparentTransmission
+{
+public:
+	virtual int OnTransparentTransmission(ST_SERVER_HEAD head, const char* pData, int nLen) = 0;
+};
+class CXMediaStreamData//StreamData
+{
+public:
+	virtual int OnStreamData(ST_SERVER_HEAD head, const char* pStreamData, int nLen) = 0;
+};
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+struct DeviceInfo_T
+{
+	//
+	char core_svr_ip[64];
+	int core_svr_port;
+	//
+	char his_svr_ip[64];
+	int his_svr_port;
+	//
+
+	char publish_svr_ip_or_uuid[64];
+	int publish_svr_port;
+	//
+	char user_name[64];
+	char user_pwd[64];
+	//
+
+	int dev_id;
+	int dev_channel;//must 0
+
+};
+
+enum XMEDIA_DEVICE_STATUS_DEFINE
+{
+	XMEDIA_DEVICE_STATUS_PREVIEW = 0,
+
+};
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+class CXMediaDeviceInterface
+{
+public:
+	virtual int XDeviceDelete() = 0;
+
+public:
+	//
+	virtual int XDeviceSetInfo(DeviceInfo_T t, CXMediaTransparentTransmissionCallback *tran_cb = NULL, CXMediaMessageCallback *cb = NULL, void * pUser = NULL) = 0;
+
+public:
+	//
+	virtual int XDeviceLogin() = 0;
+	//
+	virtual int XDeviceLogout() = 0;
+	//
+	virtual int XDeviceGetStatus(XMEDIA_DEVICE_STATUS_DEFINE type) = 0;
+
+
+#ifdef _PLATFORM_WINDOW
+	//"hWnd" can be "NULL"
+	virtual int XPreviewOpenForWindows(HWND hWnd, CXMediaStreamData* pDataObj = NULL, DecodeVideoCallBack* pDecDataObj = NULL, void *pUser = NULL) = 0;
+#endif
+#if (defined _PLATFORM_ANDROID) || (defined _PLATFORM_IOS) || (defined _PLATFORM_WINDOW_WIN10_UWP)
+	virtual int XPreviewOpenForApp(DecodeVideoCallBack* pDecDataObj = NULL, CXMediaStreamData* pVoiceObj = NULL , void *pUser = NULL) = 0;
+#endif
+	//
+	virtual int XPreviewClose() = 0;
+	//1==nOpenSound:open 0:close
+	virtual int XPreviewSound(int nOpenSound) = 0;
+	//
+	virtual int XPreviewCapturePictures(const char* szFilePath, const char* szFileName) = 0;
+	//TRUE==bStart:open FALSE:close
+	virtual int XPreviewRecord(const char* szFilePath, const char *szDevName, BOOL bStart) = 0;
+
+	//Transmission
+	virtual int TransparentTransmission(const  char *  szChanParam, int nlen) = 0;
+
+public:
+	//Download
+	virtual CXMediaDownloadInterface* CreateDownloadHisFileInstance() = 0;
+};
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//
+class CXMediaDownloadInterface
+{
+public:
+	virtual int XDownloadHisFileDelete() = 0;
+
+public:
+	//
+	virtual int XDownloadHisFileListFromMedia(_XSERVER_TIME szBeginTime, _XSERVER_TIME szEndTime, vector<HIS_LOG_T> &v) = 0;//获取文件列表
+	//
+	virtual int XDownloadHislogFromMedia(_XSERVER_TIME szBeginTime, _XSERVER_TIME szEndTime, CXMediaDownloadCallback* pDownloadObj = NULL, void *pUser = NULL) = 0;
+	//
+#ifdef _PLATFORM_WINDOW
+	//
+	virtual int XDownloadHisFileFromMediaForWindows(_XSERVER_TIME szBeginTime, _XSERVER_TIME szEndTime, DeviceInfo_T t, HWND hwnd) = 0;//按时间下载文件
+	//
+	virtual int XDownloadHisFilePlayFrame() = 0; //>0表示与下一帧的时间间隔，-1表示失败，0表示无数据 
+	//
+	virtual int XDownloadHisFileSeekSecond(int sec) = 0; //从指定的时间播放
+	//
+	virtual int XDownloadHisFileGetPlaySecond() = 0; //获取已播放秒数
+	//
+	virtual int XDownloadHisFileGetDownloadSecond() = 0;//获取已下载秒数
+	//
+	virtual int XDownloadHisFileGetSecond() = 0;//获取文件长度
+	//
+	virtual int XDownloadHisFileWiteMp4File(char * pathfile) = 0;
+	//
+	virtual int XDownloadHisFileGetWiteMp4FileProgress() = 0;
+#endif
+	//
+	virtual int XDownloadHisFileClose() = 0;
+};
+
+class CXMediaDownloadCallback
+{
+public:
+	//cmd:Z_CMD_OF_SERVER_AV_STREAM
+	//reslut:emCmdResultOfServer
+	virtual int OnDownloadHisFileCallback(ST_SERVER_HEAD head, const char *data, int len, const void * pUser) = 0;
+};
+
+#endif

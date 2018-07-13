@@ -1,0 +1,32 @@
+https://github.com/dotnet/core/blob/master/release-notes/download-archive.md
+点击每个版本的download，里面有不同系统的安装方法
+
+
+IIS上已经安装了AspNetCoreModule托管模块，如果没有的话，下载并安装Windows Server Hosting (.exe)
+
+https://www.microsoft.com/net/download/windows
+
+
+
+
+
+添加一个网站，设置一下名称，并将路径指向你刚才发布的文件夹，然后启动网站即可 例如coreweb1
+修改应用程序池的coreweb1 的属性， 设置.NET CLR版本为“无托管代码”，因为刚才也说了，IIS是作为一个反向代理的角色，并不需要它来托管代码
+
+
+安装IIS
+在控制面板→程序→启用或关闭Windows功能→勾选Internet Information Services以及Web管理工具下的IIS管理控制台
+
+
+在运行中输入 iisreset  重启IIS
+
+
+asp.net core部署到iis中出现 HTTP Error 502.5 - Process Failure的问题 
+问题的原因是缺少文件：api-ms-win-crt-runtimel1-1-0.dll，
+安装系统补丁：
+2012 R2对应》Windows8.1-KB2999226-x64.msu
+下载地址：
+https://www.microsoft.com/zh-CN/download/details.aspx?id=49063
+2012 对应》Windows8-RT-KB2999226-x64.msu
+下载地址：
+https://www.microsoft.com/zh-cn/download/details.aspx?id=49091&134b2bb0-86c1-fe9f-d523-281faef41695=1

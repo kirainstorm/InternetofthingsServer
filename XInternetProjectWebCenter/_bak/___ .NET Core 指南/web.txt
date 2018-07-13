@@ -1,0 +1,33 @@
+
+创建工程
+new  --- project --- c# ----- web--- empty (mvc api)
+
+引入ef
+Install-Package EntityFramework -Version 6.2.0 
+Install-Package Microsoft.Web.Infrastructure
+
+
+手工创建数据，并创建各种规则，使用vs的server explorer选项卡
+
+
+
+
+添加Entity Data Model
+https://docs.microsoft.com/en-us/aspnet/mvc/overview/getting-started/database-first-development/creating-the-web-application
+Right-click the Models folder, and select Add and New Item.
+
+In the Add New Item window, select Data in the left pane and ADO.NET Entity Data Model from the options in the center pane. Name the new model file xxxxxxModel.
+
+In the Entity Data Model Wizard, select EF Designer from database.以下略，可以从数据库中生成model
+
+修改了数据库后如何修改model
+https://docs.microsoft.com/en-us/aspnet/mvc/overview/getting-started/database-first-development/changing-the-database
+In the Models folder, open the ContosoModel.edmx file to display the model diagram. Notice that the Student model does not contain the MiddleName property. Right-click anywhere on the design surface, and select Update Model from Database.
+
+
+api模型可以返回json数据
+在controller文件夹右键 -- add -- controller ---选择 Web Api 2 controller XXXXX
+
+未能加载文件或程序集 Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad 
+发布后请将WebRedirectCenter\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40下的Microsoft.Web.Infrastructure拷贝到webredirectcener\bin下
+

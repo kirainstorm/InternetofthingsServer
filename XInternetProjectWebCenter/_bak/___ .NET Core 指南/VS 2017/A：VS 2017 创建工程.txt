@@ -1,0 +1,6 @@
+new  --- project  ---  c# ---- .net core --- asp.net core web application  下一步
+
+
+选择合适自己的模板  empty   webapi  webapplication(razor)  webapplication(mvc)
+
+

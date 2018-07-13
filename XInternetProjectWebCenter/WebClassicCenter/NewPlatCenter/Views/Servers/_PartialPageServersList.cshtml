@@ -1,0 +1,80 @@
+﻿@model IEnumerable<NewPlatCenter.Models.Server>
+@using PagedList;
+@using PagedList.Mvc;
+
+
+
+<script>
+    var _item_index = 0;
+</script>
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <button type="button" class="btn btn-default " data-toggle="modal" data-target="#CreateServers">
+            创建
+        </button><br />这是核心服务器，负责与设备连接（设备主动连接），流转发，存储，历史视频回放，信令透传<br />
+                                不允许修改，如果有错误的信息，请删除重新添加！删除后原有的服务器将自动退出<br />
+                                默认端口为：【流转发端口：8000】 【回放端口：8001】【设备注册端口：8002】
+    </div>
+    <div class="panel-body">
+        <div class="container-fluid">
+            @{var _item_index = 0;}
+            @foreach (var item in Model)
+            {
+                if (0 == _item_index)
+                {
+                    @:<br />
+                }
+
+                if ((_item_index % 4) == 0)
+                {
+                    @:<div class="row">
+            }
+
+
+            <div class="col-sm-6 col-md-3">
+                <div class="thumbnail">
+                    <div class="caption">
+                        <h3 style="word-wrap:break-word;height:80px">@Html.DisplayFor(modelItem => item.S_Name)</h3>
+                        外网IP:@Html.DisplayFor(modelItem => item.S_Core_Out_IP)
+                        <br /><br />内网IP:@Html.DisplayFor(modelItem => item.S_Core_In_IP)
+                        <br /><br />序列号:@Html.DisplayFor(modelItem => item.S_Serial)
+                        <br /><br />承载量:@Html.DisplayFor(modelItem => item.S_Online_Count)
+                        <p>
+                            <br /><a class="btn btn-link btn-xs" onclick="_op_device(@item.ID)">设备管理</a>|
+                            <a class="btn btn-link btn-xs" onclick="_DeleteCoreServer_Tmp(@item.ID)">删除</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+                if ((_item_index % 4) == 3)
+                {
+                    @:</div>
+            }
+
+
+                _item_index++;
+            }
+            @{
+                int k = _item_index - (_item_index / 4) * 4;
+                if (k != 0)
+                {
+                    //不足一行补齐标签
+                    @:</div>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+
+<!--异步的，隐藏的，刷新当前页的按钮，当添加删除修改后调用-->
+@using (Ajax.BeginForm(new AjaxOptions
+            {
+                UpdateTargetId = "tableBody",
+                Url = Url.Action("_PartialPageServersList"),
+            }))
+{
+    <button class="btn btn-primary" type="submit" style="display:none" id="s_refresh">refresh!</button>
+}

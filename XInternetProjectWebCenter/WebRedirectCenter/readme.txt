@@ -1,0 +1,1 @@
+注册功能集成到XInternetRedirection了

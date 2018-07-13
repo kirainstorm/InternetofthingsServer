@@ -1,0 +1,26 @@
+五：使用T-SQL语句来创建触发器
+　　基本语句如下：
+　　create trigger trigger_name
+　　on {table_name | view_name}
+　　{for | After | Instead of }
+　　[ insert, update,delete ]
+　　as
+　　sql_statement
+　　六：删除触发器：
+　　基本语句如下：
+　　drop trigger trigger_name
+　　七：查看数据库中已有触发器：
+　　-- 查看数据库已有触发器
+　　use jxcSoftware
+　　go
+　　select * from sysobjects where xtype='TR'
+　　-- 查看单个触发器
+　　exec sp_helptext '触发器名'
+　　八：修改触发器：
+　　基本语句如下：
+　　alter trigger trigger_name
+　　on {table_name | view_name}
+　　{for | After | Instead of }
+　　[ insert, update,delete ]
+　　as
+　　sql_statement

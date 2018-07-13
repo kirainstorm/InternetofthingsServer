@@ -1,0 +1,39 @@
+不能在此路径中使用此配置节。如果在父级别上锁定了该节,便会出现这种情况。
+
+cmd.exe要以管理员身份启动
+C:\windows\system32\inetsrv\appcmd unlock config -section:system.webServer/handlers
+C:\windows\system32\inetsrv\appcmd unlock config -section:system.webServer/modules
+
+
+IIS上部署MVC网站，打开后ExtensionlessUrlHandler-Integrated-4.0解决办法
+以管理员运行下面的命令注册：
+32位机器：
+C:\Windows\Microsoft.NET\Framework\v4.0.30319\aspnet_regiis.exe -i
+64位机器：
+C:\Windows\Microsoft.NET\Framework64\v4.0.30319\aspnet_regiis.exe -i
+
+部署sql server时建议修改1433为其他端口
+
+修改数据库表结构时提示
+不允许保存更改。您所做的更改要求删除并重新创建以下表。您对无法重新创建的标进行了更改或者启用了“阻止保存要求重新创建表的更改"选项。
+【工具】【选项】 设计器 -- 表设计器和数据库设计器 取消选择“阻止保存要求重新创建表的更改”
+
+
+sql server 索引
+非聚集索引
+sqlserver默认情况下建立的索引是非聚集索引，他不重新组织表中的数据，而是对每一行存储索引列值并用一个指针指向数据所在的页面。他像汉语字典中的根据‘偏旁部首’查找要找的字，即便对数据不排序，然而他拥有的目录更像是目录，对查取数据的效率也是具有的提升空间，而不需要全表扫描。
+一个表可以拥有多个非聚集索引，每个非聚集索引根据索引列的不同提供不同的排序顺序。
+SQL SERVER中有多种索引类型。
+按存储结构区分：“聚集索引（又称聚类索引，簇集索引）”，“分聚集索引（非聚类索引，非簇集索引）”
+按数据唯一性区分：“唯一索引”，“非唯一索引”
+按键列个数区分：“单列索引”，“多列索引”。
+
+
+
+数据库对象是否区分大小写,与数据库本身的排序规则有关. 对于主键是字符串的，不区分大小写
+数据库 
+ALTER DATABASE database COLLATE Chinese_PRC_CS_AS 
+--区分大小写 
+ALTER DATABASE database COLLATE Chinese_PRC_CI_AS 
+--不区分大小写 默认
+

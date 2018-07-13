@@ -1,0 +1,149 @@
+计算得知base 5dtu 能力为1800次操作/秒
+默认关闭Azure自动微调， 请关闭 Azure自动微调（优化），，打开之后很多语句无法执行，不知道为什么，蛋痛
+
+
+===================================================================================================================
+base 5dtu
+####：在阿里云华东访问香港azure服务器，base 5dtu
+####：执行查询时不显示结果，减少ui执行增加的时间 discard results after executing
+####：iotserver 无索引
+
+1：使用附注1：执行事物tran_AddUserInfo，10w次，耗时1分19秒，550kbps ，dtu 100%， 计算得知：1250次插入/秒，数据大小18MB //无自增长索引，使用用户名作为关键字
+
+2：使用附注2：全部查询查询（10w条） 15秒 2分43秒 dtu 40% 数据传输 3.8Mbps
+
+3：使用附注3：随机查询10w条，random 20%不存在，dtu 100%，耗时1分7s  数据传输4.8Mbps 计算得知：1500次读/秒
+
+4：使用附注4：随机更新10w条，random 20%不存在，dtu 100%，耗时1分16s 数据传输600Kbps  计算得知：1300次update/秒
+
+5：使用 select * from users where iotserver='127.1.1.1'  
+   使用 select * from users where iotserver='127.0.0.1'  返回4.36W 条数据，耗时06秒 
+   使用 select * from users where iotserver='127.3.3.1'  返回67k 条数据，耗时0秒 // while @i<20000 update users set iotserver='127.3.3.1' where useremail=convert(varchar(10),@qid)+'@qq.com' and iotserver='127.0.0.1'
+
+
+6：delete from users 100W
+===================================================================================================================
+
+
+附注1：
+
+begin tran tran_AddUserInfo --开始事务
+--
+declare @tran_error int;
+set @tran_error=0;
+--
+begin try
+	declare @i int
+	declare @qid int
+	set @i=1
+	set @qid=1
+	while @i<100000
+	begin
+	insert into users(useremail,userpwd,iotserver,userjpgnum,userjpglasttime,userstoresize,userstorelasttime,lastlogintime) values(convert(varchar(10),@qid)+'@qq.com','123456','127.0.0.1',4,dateadd(day,1000,getdate()),0,getdate(),getdate())
+	set @i=@i+1
+	set @qid=@qid+1
+	end
+end try
+begin catch
+  set @tran_error=@tran_error+1; --加分号或不加都能正常执行
+end catch
+--
+if(@tran_error>0)
+begin
+  rollback tran; --执行出错，回滚事务(不指定事务名称)
+  print @tran_error;
+end 
+else
+begin
+  commit tran; --没有异常，提交事务(不指定事务名称)
+  print @tran_error;
+end
+
+
+
+附注2：
+SELECT  [useremail]
+      ,[userpwd]
+      ,[iotserver]
+      ,[userjpgnum]
+      ,[userjpglasttime]
+      ,[userstoresize]
+      ,[userstorelasttime]
+      ,[lastlogintime]
+  FROM [dbo].[users]
+  order by  lastlogintime desc
+
+
+
+
+
+
+
+附注3：
+begin tran tran_selectUserInfo --开始事务
+--
+declare @tran_error int;
+set @tran_error=0;
+--
+begin try
+	declare @i int
+	declare @qid int
+	set @i=1
+	while @i<100000
+	begin
+	set @qid=cast( floor(rand()*120000) as int)
+	select * from users where useremail=convert(varchar(10),@qid)+'@qq.com' and userpwd = '123456'
+	set @i=@i+1
+	end
+end try
+begin catch
+  set @tran_error=@tran_error+1; --加分号或不加都能正常执行
+end catch
+--
+if(@tran_error>0)
+begin
+  rollback tran; --执行出错，回滚事务(不指定事务名称)
+  print @tran_error;
+end 
+else
+begin
+  commit tran; --没有异常，提交事务(不指定事务名称)
+  print @tran_error;
+end
+
+
+
+附注4：
+begin tran tran_updateUserInfo --开始事务
+--
+declare @tran_error int;
+set @tran_error=0;
+--
+begin try
+	declare @i int
+	declare @qid int
+	set @i=1
+	while @i<100000
+	begin
+	set @qid=cast( floor(rand()*120000) as int)
+	update users set iotserver='127.1.1.1' where useremail=convert(varchar(10),@qid)+'@qq.com' and userpwd = '123456'
+	set @i=@i+1
+	end
+end try
+begin catch
+  set @tran_error=@tran_error+1; --加分号或不加都能正常执行
+end catch
+--
+if(@tran_error>0)
+begin
+  rollback tran; --执行出错，回滚事务(不指定事务名称)
+  print @tran_error;
+end 
+else
+begin
+  commit tran; --没有异常，提交事务(不指定事务名称)
+  print @tran_error;
+end
+
+
+

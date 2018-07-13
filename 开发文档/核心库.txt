@@ -1,0 +1,39 @@
+
+1：跨平台头文件
+PlatformDefine.h
+由于是服务器，只用了 #define _PLATFORM_WINDOW
+
+
+2：网络核心库  使用boost库
+XStreamInterface.h  纯虚函数定义
+
+CXNetStreamData ：数据回调
+CXNetAcceptStreamData ：accept回调
+CXAsyncFileStreamData ：文件读写异步回调
+CXNetStream ：tcp网络流操作基类
+CXSyncFileStream ：文件同步读写基类
+CXAsyncFileStream ：文件异步读写基类
+
+XStream.hpp
+XStreamManager.hpp   boost io_service 实例类 ，包括ssl
+XStreamAccept.hpp  tcp连接异步回调类
+XStreamWebSocketAccept.hpp websocket连接异步回调类
+XStreamConnect.hpp tcp connect 类
+XStreamAsyncFileWindows.hpp 文件同步读写类
+XStreamSyncFileWindows.hpp 文件异步读写类
+
+
+
+
+3：授权码/加解密
+
+
+4：数据库
+
+
+
+5：内存池
+
+
+
+6：智能指针

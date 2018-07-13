@@ -1,0 +1,33 @@
+
+wwwroot/css/site.css
+
+
+
+
+
+/* bootstrap 只定义到 @media (min-width:1200px) */
+
+/* 1366 1440*/
+@media (min-width: 1300px) {
+    .container {
+        width: 1250px
+    }
+}
+
+/*1600*/
+@media (min-width: 1559px) {
+    .container {
+        width: 1470px
+    }
+}
+/*1920*/
+@media (min-width: 1809px) {
+    .container {
+        width: 1650px
+    }
+}
+@media (min-width: 2059px) {
+    .container {
+        width: 1850px
+    }
+}
