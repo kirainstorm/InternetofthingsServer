@@ -127,7 +127,7 @@ namespace NewPlatCenter.Controllers
 
         //=======================================================================================================================================
         [HttpGet]
-        public string AddDevice(int areaid, int disk, int serial, string name, int mainsub,int type)
+        public string AddDevice(int areaid, int disk, int serial, string name, int mainsub,int type,string ctx)
         {
             if (areaid < 1)
             {
@@ -157,6 +157,7 @@ namespace NewPlatCenter.Controllers
                 D_Serial = serial,
                 D_Stream_Main_Sub = mainsub,
                 D_Type = type,
+                D_Content = ctx,
                 D_Browse_Num = 0,
                 D_Is_Online = 0,
                 D_Date = DateTime.Now
@@ -167,7 +168,7 @@ namespace NewPlatCenter.Controllers
         }
 
         [HttpGet]
-        public string EditDevice(int id, int disk, int serial, string name, int mainsub,int type)
+        public string EditDevice(int id, int disk, int serial, string name, int mainsub,int type,string ctx)
         {
             List<Device> _d = (from m in db.Devices
                                where ((m.ID == id))
@@ -195,6 +196,7 @@ namespace NewPlatCenter.Controllers
             _d[0].D_Serial = serial;
             _d[0].D_Stream_Main_Sub = mainsub;
             _d[0].D_Type = type;
+            _d[0].D_Content = ctx;
             db.Entry(_d[0]).State = EntityState.Modified;
             db.SaveChanges();
 

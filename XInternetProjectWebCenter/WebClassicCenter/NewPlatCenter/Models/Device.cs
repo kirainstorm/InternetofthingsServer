@@ -43,7 +43,10 @@ namespace NewPlatCenter.Models
         public int D_Stream_Main_Sub { get; set; } //主子码流 0:主码流 1：子码流
 
         [Required]
-        public int D_Type { get; set; }//设备类型 0: 自家设备 1：rtsp 大华
+        public int D_Type { get; set; }//设备类型 0: 自家设备 1：rtsp 
+        [StringLength(256)]
+        public string D_Content { get; set; }//设备名称
+
 
         //--------------------------------------------------------------------------------------------------------
         public int D_Browse_Num { get; set; } //在线观看人数

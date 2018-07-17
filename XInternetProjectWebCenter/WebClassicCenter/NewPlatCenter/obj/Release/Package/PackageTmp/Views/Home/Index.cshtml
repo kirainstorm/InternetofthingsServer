@@ -164,6 +164,12 @@
                         <input class="form-control text-box single-line" id="device_name_add" name="device_name_add" type="text" value="" />
                     </div>
                 </div>
+                <div id="divserial" class="form-group  form-group-sm">
+                    <label class="col-sm-3 control-label">序列号只能输入不超过4亿的数字</label>
+                    <div class="col-sm-9">
+                        <input class="form-control text-box single-line" id="device_serial_add" name="device_serial_add" type="text" value="" />
+                    </div>
+                </div>
                 <div id="divmainsub" class="form-group  form-group-sm">
                     <label class="col-sm-3 control-label">码流</label>
                     <div class="col-sm-9">
@@ -192,16 +198,17 @@
                     <div class="col-sm-9">
                         <select id="device_type_add" name="device_type_add" class="selectpicker show-tick form-control" data-size="7">
                             <option value="0">自家设备</option>
-                            <option value="1">大华设备RTSP</option>
+                            <option value="1">RTSP-1</option>
                         </select>
                     </div>
                 </div>
-                <div id="divserial" class="form-group  form-group-sm">
-                    <label class="col-sm-3 control-label">序列号只能输入不超过4亿的数字</label>
+                <div id="divcontent" class="form-group  form-group-sm">
+                    <label class="col-sm-3 control-label">设备RTSP地址</label>
                     <div class="col-sm-9">
-                        <input class="form-control text-box single-line" id="device_serial_add" name="device_serial_add" type="text" value="" />
+                        <input class="form-control text-box single-line" id="device_content_add" name="device_content_add" type="text" value="" />
                     </div>
                 </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -223,6 +230,12 @@
                     <label class="col-sm-3 control-label">设备名称</label>
                     <div class="col-sm-9">
                         <input class="form-control text-box single-line" id="device_name_edit" name="device_name_edit" type="text" value="" />
+                    </div>
+                </div>
+                <div id="divserial" class="form-group  form-group-sm">
+                    <label class="col-sm-3 control-label">序列号只能输入不超过4亿的数字</label>
+                    <div class="col-sm-9">
+                        <input class="form-control text-box single-line" id="device_serial_edit" name="device_serial_edit" type="text" value="" />
                     </div>
                 </div>
                 <div id="divmainsub" class="form-group  form-group-sm">
@@ -253,16 +266,17 @@
                     <div class="col-sm-9">
                         <select id="device_type_edit" name="device_type_edit" class="selectpicker show-tick form-control" data-size="7">
                             <option value="0">自家设备</option>
-                            <option value="1">大华设备RTSP</option>
+                            <option value="1">RTSP-1</option>
                         </select>
                     </div>
                 </div>
-                <div id="divserial" class="form-group  form-group-sm">
-                    <label class="col-sm-3 control-label">序列号只能输入不超过4亿的数字</label>
+                <div id="divcontent" class="form-group  form-group-sm">
+                    <label class="col-sm-3 control-label">设备RTSP地址</label>
                     <div class="col-sm-9">
-                        <input class="form-control text-box single-line" id="device_serial_edit" name="device_serial_edit" type="text" value="" />
+                        <input class="form-control text-box single-line" id="device_content_edit" name="device_content_edit" type="text" value="" />
                     </div>
                 </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

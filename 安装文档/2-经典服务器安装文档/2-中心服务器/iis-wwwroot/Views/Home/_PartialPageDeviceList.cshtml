@@ -36,8 +36,9 @@
                         <br />主子码流:@Html.DisplayFor(modelItem => item.D_Stream_Main_Sub) （0:主  1:子）
                         <br />Online:@Html.DisplayFor(modelItem => item.D_Is_Online)
                         <br />设备类型:@Html.DisplayFor(modelItem => item.D_Type)
+                        <br />@Html.DisplayFor(modelItem => item.D_Content)
                         <p>
-                            <a class="btn btn-link btn-xs" onclick="_EditDevice_Temp(@item.ID ,@item.D_Disk,'@item.D_Name','@item.D_Serial',@item.D_Stream_Main_Sub,@item.D_Type)">编辑</a> |
+                            <a class="btn btn-link btn-xs" onclick="_EditDevice_Temp(@item.ID ,@item.D_Disk,'@item.D_Name','@item.D_Serial',@item.D_Stream_Main_Sub,@item.D_Type,'@item.D_Content')">编辑</a> |
                             <a class="btn btn-link btn-xs" onclick="_DeleteDevice_Temp(@item.ID);">删除</a>
                             <!--a class="btn btn-link btn-xs" onclick="_MoveDevice_Temp(@item.ID);">|移动</a-->
                         </p>

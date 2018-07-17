@@ -107,7 +107,7 @@ function _AddDevice() {
         alert("请填写序列号");
         return;
     }
-    var _url = "Home/AddDevice?areaid=" + encodeURI($("#searchareaid").val() + "&disk=" + $('#device_disk_add').val() + "&serial=" + $('#device_serial_add').val() + "&name=" + $('#device_name_add').val() + "&mainsub=" + $('#device_mainsub_add').val() + "&type=" + $('#device_type_add').val());
+    var _url = "Home/AddDevice?areaid=" + encodeURI($("#searchareaid").val() + "&disk=" + $('#device_disk_add').val() + "&serial=" + $('#device_serial_add').val() + "&name=" + $('#device_name_add').val() + "&mainsub=" + $('#device_mainsub_add').val() + "&type=" + $('#device_type_add').val() + "&ctx=" + $('#device_content_add').val());
     //alert(_url);
     $.get(_url, function (response) {
         // alert(response);
@@ -121,8 +121,9 @@ function _AddDevice() {
     });
     $('#addDevie').modal('toggle');
     $("#s_refresh").click();//刷新
+    $("#s_refresh").click();//刷新
 }
-function _EditDevice_Temp(_id, _disk, _name, __serial,_mainsub,_type) {
+function _EditDevice_Temp(_id, _disk, _name, __serial,_mainsub,_type,_content) {
     _device_id = _id;
     $('#device_disk_edit').val(_disk);
     $('#device_disk_edit').selectpicker('refresh');
@@ -132,6 +133,7 @@ function _EditDevice_Temp(_id, _disk, _name, __serial,_mainsub,_type) {
     $('#device_mainsub_edit').selectpicker('refresh');
     $('#device_type_edit').val(_type);
     $('#device_type_edit').selectpicker('refresh');
+    $('#device_content_edit').val(_content);
     $('#EditDevice').modal('toggle');
 }
 function _EditDevice() {
@@ -143,7 +145,7 @@ function _EditDevice() {
         alert("请填写序列号");
         return;
     }
-    var _url = "Home/EditDevice?id=" + encodeURI(_device_id + "&disk=" + $('#device_disk_edit').val() + "&serial=" + $('#device_serial_edit').val() + "&name=" + $('#device_name_edit').val() + "&mainsub=" + $('#device_mainsub_edit').val() + "&type=" + $('#device_type_edit').val());
+    var _url = "Home/EditDevice?id=" + encodeURI(_device_id + "&disk=" + $('#device_disk_edit').val() + "&serial=" + $('#device_serial_edit').val() + "&name=" + $('#device_name_edit').val() + "&mainsub=" + $('#device_mainsub_edit').val() + "&type=" + $('#device_type_edit').val() + "&ctx=" + $('#device_content_edit').val());
     //alert(_url);
     $.get(_url, function (response) {
         //alert(response);
@@ -156,6 +158,7 @@ function _EditDevice() {
     });
     $('#EditDevice').modal('toggle');
     $("#s_refresh").click();//刷新
+    $("#s_refresh").click();//刷新
 }
 function _DeleteDevice_Temp(_id) {
     _device_id = _id;
@@ -166,6 +169,7 @@ function _DeleteDevice() {
     $.get(_url, function (response) {
     });
     $('#DeleteDevice').modal('toggle');
+    $("#s_refresh").click();//刷新
     $("#s_refresh").click();//刷新
 }
 //===========================================================================================================
